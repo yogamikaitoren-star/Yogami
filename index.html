@@ -3,106 +3,331 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Yogami Novel Reader</title>
+
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
 body{
-    min-height:100vh;color:white;font-family:Arial,sans-serif;
-    background:radial-gradient(circle at top,#5b267d,#160d20 45%,#050505);
+    min-height:100vh;
+    color:white;
+    font-family:Arial,sans-serif;
+    background:
+    radial-gradient(circle at top,#5b267d,#160d20 45%,#050505);
 }
+
 header{
-    text-align:center;padding:28px 15px;background:#00000055;
-    backdrop-filter:blur(15px);border-bottom:1px solid #ffffff20;
+    text-align:center;
+    padding:28px 15px;
+    background:#00000055;
+    backdrop-filter:blur(15px);
+    border-bottom:1px solid #ffffff20;
 }
-header h1{font-size:28px}
-header p{margin-top:7px;color:#aaa}
-.container{max-width:1000px;margin:auto;padding:25px 15px}
-.title{margin-bottom:20px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:20px}
+
+header h1{
+    font-size:28px;
+}
+
+header p{
+    margin-top:7px;
+    color:#aaa;
+}
+
+.container{
+    max-width:1000px;
+    margin:auto;
+    padding:25px 15px;
+}
+
+.title{
+    margin-bottom:20px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:
+    repeat(auto-fill,minmax(170px,1fr));
+    gap:20px;
+}
+
 .card{
-    padding:10px;border-radius:18px;background:#ffffff0d;
-    border:1px solid #ffffff20;cursor:pointer;transition:.3s;
+    padding:10px;
+    border-radius:18px;
+    background:#ffffff0d;
+    border:1px solid #ffffff20;
+    cursor:pointer;
+    transition:.3s;
     box-shadow:0 10px 30px #0005;
 }
-.card:hover{transform:translateY(-7px);background:#ffffff18}
+
+.card:hover{
+    transform:translateY(-7px);
+    background:#ffffff18;
+}
+
 .cover{
-    width:100%;aspect-ratio:2/3;object-fit:cover;
-    border-radius:13px;display:block;background:#222;
+    width:100%;
+    aspect-ratio:2/3;
+    object-fit:cover;
+    border-radius:13px;
+    display:block;
+    background:#222;
 }
-.card h3{margin-top:12px;font-size:17px}
-.card p{margin-top:6px;color:#aaa;font-size:13px}
+
+.card h3{
+    margin-top:12px;
+    font-size:17px;
+}
+
+.card p{
+    margin-top:6px;
+    color:#aaa;
+    font-size:13px;
+}
+
+
+/* =========================
+   PEMBACA PDF
+========================= */
+
 #reader{
-    display:none;position:fixed;inset:0;z-index:100;background:#050505;
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:100;
+    background:#050505;
 }
+
 .top{
-    height:65px;display:flex;align-items:center;gap:15px;
-    padding:10px 15px;background:#111;border-bottom:1px solid #333;
+    height:65px;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    padding:10px 15px;
+    background:#111;
+    border-bottom:1px solid #333;
 }
-.back,.bottom button{
-    border:0;border-radius:10px;padding:11px 16px;
-    background:#292929;color:white;font-size:14px;
+
+.back,
+.bottom button{
+    border:0;
+    border-radius:10px;
+    padding:11px 16px;
+    background:#292929;
+    color:white;
+    font-size:14px;
 }
-#novelTitle{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-#pdfViewer{width:100%;height:calc(100vh - 130px);border:0;background:white}
+
+.back{
+    cursor:pointer;
+}
+
+#novelTitle{
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+}
+
+#pdfViewer{
+    width:100%;
+    height:calc(100vh - 130px);
+    border:0;
+    background:white;
+}
+
 .bottom{
-    height:65px;display:flex;align-items:center;
-    justify-content:center;gap:15px;background:#111;border-top:1px solid #333;
+    height:65px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:15px;
+    background:#111;
+    border-top:1px solid #333;
 }
-#number{color:#aaa}
+
+#number{
+    color:#aaa;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
 @media(max-width:600px){
-    .grid{grid-template-columns:repeat(2,1fr);gap:12px}
-    header h1{font-size:23px}
+
+    .grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    header h1{
+        font-size:23px;
+    }
+
 }
 </style>
+
 </head>
+
 <body>
 
+
+<!-- =========================
+     HEADER
+========================= -->
+
 <header>
+
     <h1>📖 Yogami Novel Reader</h1>
+
     <p>Koleksi Novel Pribadi</p>
+
 </header>
 
+
+<!-- =========================
+     DAFTAR NOVEL
+========================= -->
+
 <div class="container">
-    <h2 class="title">📚 Koleksi Novel</h2>
+
+    <h2 class="title">
+        📚 Koleksi Novel
+    </h2>
+
 
     <div class="grid">
-        <div class="card" onclick="bukaNovel()">
+
+        <div
+            class="card"
+            onclick="bukaNovel()"
+        >
+
             <img
                 class="cover"
                 src="Sampai_Senja_Terakhir_Directors_Cut_Remaster_Yogami.png"
                 alt="Sampai Senja Terakhir"
             >
-            <h3>Sampai Senja Terakhir</h3>
-            <p>📄 PDF • Director's Cut Remaster</p>
+
+
+            <h3>
+                Sampai Senja Terakhir
+            </h3>
+
+
+            <p>
+                📄 PDF • Director's Cut Remaster
+            </p>
+
         </div>
+
     </div>
+
 </div>
+
+
+<!-- =========================
+     PEMBACA
+========================= -->
 
 <div id="reader">
+
+
     <div class="top">
-        <button class="back" onclick="tutupNovel()">← Kembali</button>
-        <h3 id="novelTitle">Sampai Senja Terakhir</h3>
+
+        <button
+            class="back"
+            onclick="tutupNovel()"
+        >
+            ← Kembali
+        </button>
+
+
+        <h3 id="novelTitle">
+            Sampai Senja Terakhir
+        </h3>
+
     </div>
 
-    <iframe id="pdfViewer"></iframe>
+
+    <!-- PDF -->
+
+    <iframe
+        id="pdfViewer"
+        title="Pembaca Novel PDF"
+    ></iframe>
+
+
+    <!-- BAGIAN BAWAH -->
 
     <div class="bottom">
-        <button onclick="tutupNovel()">✕ Tutup</button>
-        <span id="number">Novel 1</span>
+
+        <button
+            onclick="tutupNovel()"
+        >
+            ✕ Tutup
+        </button>
+
+
+        <span id="number">
+            Novel 1
+        </span>
+
     </div>
+
 </div>
 
-<script>
-function bukaNovel(){
-    document.getElementById("reader").style.display = "block";
 
-    document.getElementById("pdfViewer").src =
-        "https://github.com/yogamikaitoren-star/Yogami/blob/main/NOVEL_SAMPAI_SENJA_TERAKHIR_BY YOGAMI.pdf?raw=true";
+<!-- =========================
+     JAVASCRIPT
+========================= -->
+
+<script>
+
+
+/* =========================
+   BUKA NOVEL
+========================= */
+
+function bukaNovel(){
+
+    document.getElementById("reader")
+        .style.display = "block";
+
+
+    document.getElementById("novelTitle")
+        .innerText = "Sampai Senja Terakhir";
+
+
+    document.getElementById("pdfViewer")
+        .src =
+        "NOVEL_SAMPAI_SENJA_TERAKHIR_BY_YOGAMI.pdf";
+
 }
+
+
+/* =========================
+   TUTUP NOVEL
+========================= */
+
 function tutupNovel(){
-    document.getElementById("reader").style.display = "none";
-    document.getElementById("pdfViewer").src = "";
+
+    document.getElementById("reader")
+        .style.display = "none";
+
+
+    document.getElementById("pdfViewer")
+        .src = "";
+
 }
+
+
 </script>
 
 </body>
