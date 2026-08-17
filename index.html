@@ -7,39 +7,44 @@
 <title>Yogami Novel Reader</title>
 
 <style>
+
 *{
     box-sizing:border-box;
     margin:0;
     padding:0;
-    font-family:Arial,sans-serif;
 }
 
 body{
     min-height:100vh;
     color:white;
+    font-family:Arial,sans-serif;
     background:
-    radial-gradient(circle at top,#39216b,#111 45%,#050505);
+    radial-gradient(circle at top,#5b267d,#160d20 45%,#050505);
 }
+
+/* HEADER */
 
 header{
     text-align:center;
-    padding:25px 15px;
-    background:#111b;
+    padding:28px 15px;
+    background:#00000055;
     backdrop-filter:blur(15px);
-    border-bottom:1px solid #333;
+    border-bottom:1px solid #ffffff20;
 }
 
 header h1{
-    font-size:27px;
+    font-size:28px;
 }
 
 header p{
+    margin-top:7px;
     color:#aaa;
-    margin-top:6px;
 }
 
+/* CONTENT */
+
 .container{
-    max-width:1100px;
+    max-width:1000px;
     margin:auto;
     padding:25px 15px;
 }
@@ -48,24 +53,27 @@ header p{
     margin-bottom:20px;
 }
 
+/* NOVEL CARD */
+
 .grid{
     display:grid;
     grid-template-columns:
-    repeat(auto-fill,minmax(160px,1fr));
-    gap:18px;
+    repeat(auto-fill,minmax(170px,1fr));
+    gap:20px;
 }
 
 .card{
     padding:10px;
     border-radius:18px;
     background:#ffffff0d;
-    border:1px solid #ffffff18;
+    border:1px solid #ffffff20;
     cursor:pointer;
     transition:.3s;
+    box-shadow:0 10px 30px #0005;
 }
 
 .card:hover{
-    transform:translateY(-6px);
+    transform:translateY(-7px);
     background:#ffffff18;
 }
 
@@ -74,25 +82,18 @@ header p{
     aspect-ratio:2/3;
     object-fit:cover;
     border-radius:13px;
-    background:#222;
+    display:block;
 }
 
 .card h3{
-    margin-top:10px;
-    font-size:16px;
-    text-transform:capitalize;
+    margin-top:12px;
+    font-size:17px;
 }
 
 .card p{
-    color:#888;
-    font-size:13px;
-    margin-top:5px;
-}
-
-.loading{
-    text-align:center;
+    margin-top:6px;
     color:#aaa;
-    padding:40px;
+    font-size:13px;
 }
 
 /* READER */
@@ -101,8 +102,8 @@ header p{
     display:none;
     position:fixed;
     inset:0;
-    z-index:10;
-    background:#080808;
+    z-index:100;
+    background:#050505;
 }
 
 .top{
@@ -121,6 +122,7 @@ header p{
     padding:10px 15px;
     background:#292929;
     color:white;
+    font-size:14px;
 }
 
 #novelTitle{
@@ -129,10 +131,11 @@ header p{
     text-overflow:ellipsis;
 }
 
-iframe{
+#pdfViewer{
     width:100%;
     height:calc(100vh - 130px);
     border:0;
+    background:white;
 }
 
 .bottom{
@@ -148,35 +151,76 @@ iframe{
 .bottom button{
     border:0;
     border-radius:10px;
-    padding:11px 17px;
+    padding:11px 16px;
     background:#292929;
     color:white;
 }
 
+#number{
+    color:#aaa;
+}
+
+/* HP */
+
 @media(max-width:600px){
+
     .grid{
         grid-template-columns:repeat(2,1fr);
         gap:12px;
     }
+
+    header h1{
+        font-size:23px;
+    }
+
 }
+
 </style>
 </head>
 
 <body>
 
+
 <header>
+
     <h1>📖 Yogami Novel Reader</h1>
-    <p>Koleksi novel kamu</p>
+
+    <p>Koleksi Novel Pribadi</p>
+
 </header>
+
 
 <div class="container">
 
-    <h2 class="title">📚 Semua Novel</h2>
+    <h2 class="title">
+        📚 Koleksi Novel
+    </h2>
 
-    <div id="novelGrid" class="grid">
-        <div class="loading">
-            ⏳ Memuat novel dari GitHub...
+
+    <div class="grid">
+
+
+        <!-- NOVEL KAMU -->
+
+        <div class="card" onclick="bukaNovel()">
+
+            <img
+                class="cover"
+                src="Sampai_Senja_Terakhir_Directors_Cut_Remaster_Yogami.jpg"
+                alt="Sampai Senja Terakhir"
+            >
+
+            <h3>
+                Sampai Senja Terakhir
+            </h3>
+
+            <p>
+                📄 PDF • Director's Cut Remaster
+            </p>
+
         </div>
+
+
     </div>
 
 </div>
@@ -188,31 +232,35 @@ iframe{
 
     <div class="top">
 
-        <button class="back" onclick="closeReader()">
+        <button
+            class="back"
+            onclick="tutupNovel()"
+        >
             ← Kembali
         </button>
 
+
         <h3 id="novelTitle">
-            Novel
+            Sampai Senja Terakhir
         </h3>
 
     </div>
 
-    <iframe id="pdfViewer"></iframe>
+
+    <iframe
+        id="pdfViewer"
+    ></iframe>
+
 
     <div class="bottom">
 
-        <button onclick="previousNovel()">
-            ⬅ Sebelumnya
+        <button onclick="tutupNovel()">
+            ✕ Tutup
         </button>
 
         <span id="number">
-            1 / 1
+            Novel 1
         </span>
-
-        <button onclick="nextNovel()">
-            Berikutnya ➡
-        </button>
 
     </div>
 
@@ -221,201 +269,37 @@ iframe{
 
 <script>
 
-const OWNER = "yogamikaitoren-star";
-const REPO = "Yogami";
-const BRANCH = "main";
+/* =========================
+   BUKA NOVEL
+========================= */
 
-let novels = [];
-let current = 0;
-
-
-/* MENGAMBIL SEMUA FILE DARI GITHUB */
-
-async function loadNovels(){
-
-    const grid =
-        document.getElementById("novelGrid");
-
-    try{
-
-        const url =
-        `https://api.github.com/repos/${OWNER}/${REPO}/contents/?ref=${BRANCH}`;
-
-        const response =
-        await fetch(url);
-
-        if(!response.ok){
-            throw new Error("Gagal mengakses GitHub");
-        }
-
-        const files =
-        await response.json();
-
-        novels = files.filter(file =>
-            file.type === "file" &&
-            file.name.toLowerCase().endsWith(".pdf")
-        );
-
-        showNovels();
-
-    }catch(error){
-
-        grid.innerHTML = `
-            <div class="loading">
-                ❌ Gagal mengambil PDF dari GitHub.
-                <br><br>
-                ${error.message}
-            </div>
-        `;
-
-    }
-
-}
-
-
-/* TAMPILKAN NOVEL */
-
-function showNovels(){
-
-    const grid =
-        document.getElementById("novelGrid");
-
-    grid.innerHTML = "";
-
-    if(novels.length === 0){
-
-        grid.innerHTML = `
-            <div class="loading">
-                📚 Belum ada PDF di repository.
-            </div>
-        `;
-
-        return;
-    }
-
-
-    novels.forEach((file,index)=>{
-
-        const card =
-            document.createElement("div");
-
-        card.className = "card";
-
-
-        const title =
-            file.name
-            .replace(/\.pdf$/i,"")
-            .replace(/[-_]/g," ");
-
-
-        card.innerHTML = `
-
-            <img
-                class="cover"
-                src="https://placehold.co/400x600/181818/ffffff?text=NOVEL"
-            >
-
-            <h3>${title}</h3>
-
-            <p>📄 PDF</p>
-
-        `;
-
-
-        card.onclick = () => {
-            openNovel(index);
-        };
-
-
-        grid.appendChild(card);
-
-    });
-
-}
-
-
-/* BUKA NOVEL */
-
-function openNovel(index){
-
-    current = index;
-
-    const file =
-        novels[current];
+function bukaNovel(){
 
     document.getElementById("reader")
-        .style.display = "block";
+    .style.display = "block";
 
-    document.getElementById("novelTitle")
-        .innerText =
-        file.name.replace(/\.pdf$/i,"");
 
     document.getElementById("pdfViewer")
-        .src =
-        `https://yogamikaitoren-star.github.io/Yogami/${encodeURIComponent(file.name)}`;
-
-    updateNumber();
+    .src =
+    "Sampai_Senja_Terakhir_Directors_Cut_Remaster_Yogami.pdf";
 
 }
 
 
-/* TUTUP NOVEL */
+/* =========================
+   TUTUP NOVEL
+========================= */
 
-function closeReader(){
+function tutupNovel(){
 
     document.getElementById("reader")
-        .style.display = "none";
+    .style.display = "none";
+
 
     document.getElementById("pdfViewer")
-        .src = "";
+    .src = "";
 
 }
-
-
-/* NEXT */
-
-function nextNovel(){
-
-    if(current < novels.length - 1){
-
-        current++;
-
-        openNovel(current);
-
-    }
-
-}
-
-
-/* PREVIOUS */
-
-function previousNovel(){
-
-    if(current > 0){
-
-        current--;
-
-        openNovel(current);
-
-    }
-
-}
-
-
-/* NOMOR */
-
-function updateNumber(){
-
-    document.getElementById("number")
-        .innerText =
-        `${current+1} / ${novels.length}`;
-
-}
-
-
-/* MULAI */
-
-loadNovels();
 
 </script>
 
